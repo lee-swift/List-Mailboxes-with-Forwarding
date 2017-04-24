@@ -1,0 +1,5 @@
+$fwds = get-mailbox -ResultSize Unlimited | Where-Object { $_.ForwardingAddress -ne $null } | sort Name | select Name, ForwardingAddress
+foreach ($fwd in $fwds) {
+$fwd | add-member -membertype noteproperty -name "ContactAddress" -value (get-Recipient $fwd.ForwardingAddress).PrimarySmtpAddress
+}
+$fwds | Export-Csv c:\forwards.csv -NoTypeInformation
